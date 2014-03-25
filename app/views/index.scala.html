@@ -29,19 +29,26 @@
 		<div class="panel-group" id="accordion">
 		<!-- ko foreach: sections -->
     
-		  <div class="panel panel-default">
+		  <div class="panel panel-info">
 			<div class="panel-heading">
+				<button type="button" class="close" data-bind="click: $root.removeSection" aria-hidden="true">&times;</button>
 			  <h4 class="panel-title">
-				<a data-toggle="collapse" data-parent="#accordion" data-bind="attr: { href: '#collapse' + $index() }, text: title">
+				<a data-toggle="collapse" data-parent="#accordion" data-bind="attr: { href: '#collapse' + id }, text: title">
 				</a>
 			  </h4>
 			</div>
-			<div class="panel-collapse collapse"  data-bind="attr: { id: 'collapse' + $index() }">
-			  <div class="panel-body" data-bind="text: text">
+			<div class="panel-collapse collapse"  data-bind="attr: { id: 'collapse' + id }">
+			  <div class="panel-body" >
+			  <span data-bind="text: text"></span>
 			  </div>
 			</div>
 		  </div>
-		  <!-- /ko -->
+		<!-- /ko -->
+			<div class="panel panel-info">
+				<div class="panel-body">
+					<button  type="button" class="btn btn-primary" data-bind="click: addSection">Add Section</button>
+				</div>
+			</div>
 		</div>
 
     </div>
