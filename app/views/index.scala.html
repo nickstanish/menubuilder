@@ -13,6 +13,7 @@
 	<script src="@routes.Assets.at("/javascripts/jquery-1.9.0.min.js")"></script>    
 	<script src="@routes.Assets.at("/javascripts/bootstrap-3.1.1.min.js")"></script>
 	<script src="@routes.Assets.at("/javascripts/knockout-3.1.0.js")"></script>
+	<script src="@routes.Assets.at("/javascripts/knockout-switch-case.js")"></script>
 	<script src="@routes.Assets.at("/javascripts/knockout.validation.min.js")"></script>
 	<script src="@routes.Assets.at("/javascripts/menubuilder.js")"></script>
    
@@ -35,59 +36,89 @@
 				<!-- ko foreach: sections -->
 		    
 				  <div class="panel panel-info">
-					<div class="panel-heading">
+					<div class="panel-heading" data-toggle="collapse" data-parent="#accordion" data-bind="attr: { href: '#collapse' + id }, click: $root.setStatusSection">
 						<button type="button" class="close" data-bind="click: $root.removeSection" aria-hidden="true">&times;</button>
-					  <h4 class="panel-title">
-						<a data-toggle="collapse" data-parent="#accordion" data-bind="attr: { href: '#collapse' + id }, text: title">
-						</a>
-					  </h4>
+					 	<h4 class="panel-title">
+							<span data-bind="text: title"></span>
+					  	</h4>
 					</div>
+
 					<div class="panel-collapse collapse"  data-bind="attr: { id: 'collapse' + id }">
 					  <div class="panel-body" >
-					  	<ul class="nav nav-pills nav-stacked" data-bind="foreach: menuItems">
-  							<li><a data-bind="click: $root.setSelection,text: title"></a></li>
-						</ul>
+					  	<!-- display every menu item for each section-->
+					  	<!-- ko foreach: menuItems -->
+					  	<div class="panel panel-info">
+							<div class="panel-heading" data-bind="click: $root.setStatusItem">
+								<button type="button" class="close" data-bind="click:  $parent.removeMenuItem" aria-hidden="true">&times;</button>
+							  	<h4 class="panel-title">
+									<span data-bind="text: title"></span>
+							  </h4>
+							</div>
+						</div>
+						<!-- /ko -->
+						<div class="panel panel-add-outer">
+							<div class="panel-heading panel-add-heading" data-bind="click: $data.addMenuItem ">
+							  	<h4 class="panel-title panel-add">
+									<span>Add Menu Item</span>
+							  </h4>
+							</div>
+						</div>
 					  </div>
 					</div>
 				  </div>
 				<!-- /ko -->
-					<div class="panel panel-info">
-						<div class="panel-body">
-							<button  type="button" class="btn btn-primary" data-bind="click: addSection">Add Section</button>
+					<div class="panel panel-add-outer">
+						<div class="panel-heading panel-add-heading" data-bind="click: addSection ">
+						  	<h4 class="panel-title panel-add">
+								<span>Add Section</span>
+						  </h4>
 						</div>
 					</div>
 				</div>
 
 		    </div>
 		</div>
+		<!-- right column and main content -->
 		<div id="page-content-wrapper">
 			<div class="container-fluid">
-				<form role="form">
-				  <div class="form-group">
-				    <label for="serviceTitle">Menu Item Title</label>
-				    <input type="text" class="form-control" id="serviceTitle" placeholder="Title" data-bind="value: selection() ? selection().title : ''">
-				  </div>
-				  <div class="form-group">
-				    <label for="serviceType">Type of Service</label>
-				    <select class="form-control" id="serviceType">
-				    	 <option>Haircut</option>
-				    	 <option>Beard Trim</option>
-				    	 <option>Scalp Massage</option>
-				    </select>
-				  </div>
-				  <div class="form-group">
-				    <label for="description">Description</label>
-				    <textarea class="form-control" rows="3" id="description" placeholder="Description" name="description"></textarea>
-				  </div>
-				  <div class="form-group">
-				    <label for="servicePrice">Price</label>
-				    <input type="text" class="form-control" id="servicePrice" placeholder="$20.00">
-				  </div>
-				  <div class="form-group">
-				    <label for="serviceLength">Appointment Length</label>
-				    <input type="text" class="form-control" id="serviceLength" placeholder="90 Minutes">
-				  </div>
-				</form>
+				<!-- knockout switch library for managing which form to display -->
+				<div data-bind="switch: dataStatus">
+    				<div data-bind="case: statusSection">
+						<div class="form-group">
+						<label for="sectionTitle">Section Title</label>
+						<input type="text" class="form-control" id="sectionTitle" placeholder="Title" data-bind="value: selection() ? selection().title : '', valueUpdate: 'afterkeydown' ">
+						</div>
+					</div>
+					<div data-bind="case: statusItem">
+						<div class="form-group">
+						    <label for="serviceTitle">Menu Item Title</label>
+						    <input type="text" class="form-control" id="serviceTitle" placeholder="Title" data-bind="value: selection() ? selection().title : '', valueUpdate: 'afterkeydown' ">
+						  </div>
+						  <div class="form-group">
+						    <label for="serviceType">Type of Service</label>
+						    <select class="form-control" id="serviceType">
+						    	 <option>Haircut</option>
+						    	 <option>Beard Trim</option>
+						    	 <option>Scalp Massage</option>
+						    </select>
+						  </div>
+						  <div class="form-group">
+						    <label for="description">Description</label>
+						    <textarea class="form-control" rows="3" id="description" placeholder="Description" name="description"></textarea>
+						  </div>
+						  <div class="form-group">
+						    <label for="servicePrice">Price</label>
+						    <input type="text" class="form-control" id="servicePrice" placeholder="$20.00">
+						  </div>
+						  <div class="form-group">
+						    <label for="serviceLength">Appointment Length</label>
+						    <input type="text" class="form-control" id="serviceLength" placeholder="90 Minutes">
+						  </div>
+					</div>
+					<div data-bind="case: $default">
+						<h2>Get started by selecting an item to the left.</h2> 
+					</div>
+				</div>
 			</div>
 		</div>	
 	</div>

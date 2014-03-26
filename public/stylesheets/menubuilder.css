@@ -16,7 +16,21 @@ body {
   overflow-y: auto;
   transition: all 0.4s ease 0s;
 }
-
+.panel-add-outer{
+	background-color: #ffffff;
+	-webkit-box-shadow: 0 0px 0px rgba(0,0,0,.05);
+	box-shadow: 0 0px 0px rgba(0,0,0,.05);
+}
+.panel-add-heading{
+	background-color: #ffffff;
+	-moz-border-radius: 30px !important;
+	border-radius: 30px !important;
+	border: 2px dotted #d3d3d3 !important;
+}
+.panel-add{
+	background-color: #ffffff;
+	text-align: center ;
+}
 #page-content-wrapper {
   width: 100%;
 }
