@@ -7,13 +7,19 @@ ko.validation.init( {
 function MenuItem(){
 	var self = this;
 	self.serviceType        = ko.observable("Haircut").extend({ required: true });
-	self.title              = ko.observable("Men's Haircut").extend({ required: true });
-	self.description        = ko.observable("The best haircuts for men on the planet!").extend({ required: true });
+	self.title              = ko.observable("Men's Haircut").extend({ 
+									required: true,
+									maxLength: 100
+								});
+	self.description        = ko.observable("The best haircuts for men on the planet!").extend({ 
+									required: true,
+									maxLength: 500
+								});
 	self.regularPrice       = ko.observable(50.00).extend( { 
 									required: true,
 									pattern:{
 										message: 'Invalid required field. Enter a price between 0.01 and 9999.99',
-                 						params: /^(\d){1,4}(\.\d\d)?$/
+										params: /^(\d){1,4}(\.\d\d)?$/
 									}
 									
 								});
@@ -28,7 +34,10 @@ function MenuItem(){
 }
 function Section(id){
 	var self        = this;
-	self.title      = ko.observable("Hair Services").extend({ required: true });
+	self.title      = ko.observable("Hair Services").extend({ 
+							required: true,
+							maxLength: 50
+						 });
 	self.id         = id;
 	self.menuItems  = ko.observableArray();
 
@@ -90,27 +99,41 @@ function AppModel() {
 			self.selectionSection(undefined);
 			self.selectionItem(item);
 		};
+	self.isValid = function(){
+		var valid = true;
+		self.sections().forEach(function(entry) {
+			if(!entry.title.isValid()){
+				valid = false;
+				return false;
+			}
+			entry.menuItems().forEach(function(item){
+				if(!item.isValid()){
+					valid = false;
+					return false;
+				}
+			});
+		});
+		return valid;
+	};
 	/**
 	*   Validate and publish entire model to server using ajax post
 	*   
 	*/
 	self.publish = function(){
 			//first validate whole model
-			self.sections().forEach(function(entry) {
-			    if(!entry.title.isValid()){
-			    	alert("Validation failed");
-			   		return;
-			   		}
-			    entry.menuItems().forEach(function(item){
-			    	if(!item.isValid()){
-			    		alert("Validation failed");
-			    		return;
-			    	}
-			    });
-			});
+			if(!self.isValid()){
+				alert("Validation failed");
+				return false;
+			}
 			//convert to json string
 			jsonString = ko.toJSON(self, null, 2);
-			$.post('/',{message: jsonString});
+			$.post('/',{message: jsonString}) 
+				.done(function() {
+				    	alert( "Submitted" );
+					})
+				.fail(function() {
+						alert( "Error submitting" );
+					});
 		};
 
 }

@@ -13,7 +13,6 @@ It features
 
 Known bugs
 - Certain display sizes can screw up scrolling display
-- initial models should be loaded though a get request via javascript
-- "Publish" validates each item in root model but does not prevent submission
+- initial models should be loaded though a GET request via javascript
 - "Publish" should notify of success/failure in a non-blocking manner
 - deleting items could be better by displaying an "undo" button for a few seconds
