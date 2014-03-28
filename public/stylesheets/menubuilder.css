@@ -5,14 +5,18 @@ body {
 #wrapper {
 	/* for sidebar*/
   padding-left: 250px;
-  transition: all 0.4s ease 0s;
+  transition: all 0.6s ease 0s;
+  overflow-y: auto;
 }
 #sidebar-wrapper {
   margin-left: -250px;
   left: 250px;
+  padding-top: 20px;
+  background-color: #ffffff;
   width: 250px;
   position: fixed;
-  height: 100%;
+  border: 2px solid #d3d3d3 !important;
+  height: 90%;
   overflow-y: auto;
   transition: all 0.4s ease 0s;
 }
@@ -31,12 +35,24 @@ body {
 	background-color: #ffffff;
 	text-align: center ;
 }
+#publish{
+	padding: 15px;
+	padding-top: 30px;
+}
 #page-content-wrapper {
   width: 100%;
 }
 #menu-toggle { 
 	/* dont show sidebar toggle if large screen*/
   display: none;
+}
+input.invalid{
+    border-color:hsl(0, 50%, 50%);
+    background:hsl(0, 50%, 90%);
+}
+textarea.invalid{
+    border-color:hsl(0, 50%, 50%);
+    background:hsl(0, 50%, 90%);
 }
 @media (max-width:780px) {
 	/*allow and setup sidebar toggle*/
@@ -52,6 +68,7 @@ body {
 	#wrapper.active {
 	  position: fixed;
 	  left: 250px;
+	  overflow-y: auto;
 	}
 	#page-content-wrapper {
   		width: 100%;

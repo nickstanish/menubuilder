@@ -4,6 +4,7 @@
 <html>
 <head>
     <title>@title</title>
+    <!-- 	responsive friendly -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta charset="utf-8">
 	
@@ -20,14 +21,16 @@
     
 </head>
 <body>
+	<!-- 	BOOTSTRAP NAV BAR -->
     <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
         <div class="navbar-header">
             <a class="navbar-brand" href="#">@title</a>
         	<button type="button" id="menu-toggle" class="btn btn-default navbar-btn pull-right">
-				<span class="glyphicon glyphicon-th-list"> Menu</span>
+				<span class="glyphicon glyphicon-th-list"> Menu</span> <!-- 	BUTTON TO TOGGLE SIDEBAR IN RESPONSIVE VIEW -->
 			</button>
         </div>
     </nav>
+
     <div id="wrapper" class="active">
 	     <!-- Sidebar -->
 	    <div id="sidebar-wrapper">
@@ -67,12 +70,17 @@
 					</div>
 				  </div>
 				<!-- /ko -->
+				
 					<div class="panel panel-add-outer">
 						<div class="panel-heading panel-add-heading" data-bind="click: addSection ">
 						  	<h4 class="panel-title panel-add">
 								<span>Add Section</span>
 						  </h4>
 						</div>
+					</div>
+					<!-- publish button that sends app model data to server -->
+					<div id="publish">
+						<button type="button" class="btn btn-primary btn-lg btn-block" data-bind="click:  publish">Publish</button>
 					</div>
 				</div>
 
@@ -81,48 +89,71 @@
 		<!-- right column and main content -->
 		<div id="page-content-wrapper">
 			<div class="container-fluid">
+				<!-- Possibly toggle alert here (later on) to UNDO delete operations -->
+				<div id="undoDeleteAlert"></div>
 				<!-- knockout switch library for managing which form to display -->
 				<div data-bind="switch: dataStatus">
-    				<div data-bind="case: statusSection">
+
+    				<div data-bind="case: statusSection"> <!-- 	SELECTED A SECTION-->
+    					 <!-- Maybe this will play nicer with knockout-validation bindings-->
+    					 <!-- ko if: selectionSection() -->
 						<div class="form-group">
 						<label for="sectionTitle">Section Title</label>
-						<input type="text" class="form-control" id="sectionTitle" placeholder="Title" data-bind="value: selection() ? selection().title : '', valueUpdate: 'afterkeydown' ">
+						<input type="text" class="form-control" id="sectionTitle" placeholder="Title" data-bind="value: selectionSection().title, valueUpdate: 'afterkeydown' ">
 						</div>
+						<!-- /ko -->
+
 					</div>
-					<div data-bind="case: statusItem">
+
+					<div data-bind="case: statusItem"> <!-- 	SELECTED A MENU ITEM -->
+						 <!-- ko if: selectionItem() -->
 						<div class="form-group">
 						    <label for="serviceTitle">Menu Item Title</label>
-						    <input type="text" class="form-control" id="serviceTitle" placeholder="Title" data-bind="value: selection() ? selection().title : '', valueUpdate: 'afterkeydown' ">
+						   
+						    <input type="text" class="form-control" id="serviceTitle" placeholder="Title" data-bind="value: selectionItem().title , valueUpdate: 'afterkeydown' ">
 						  </div>
+
 						  <div class="form-group">
 						    <label for="serviceType">Type of Service</label>
-						    <select class="form-control" id="serviceType">
+						    <select class="form-control" id="serviceType" data-bind="value: selectionItem().serviceType">
 						    	 <option>Haircut</option>
 						    	 <option>Beard Trim</option>
 						    	 <option>Scalp Massage</option>
 						    </select>
 						  </div>
+
 						  <div class="form-group">
 						    <label for="description">Description</label>
-						    <textarea class="form-control" rows="3" id="description" placeholder="Description" name="description"></textarea>
+						    <textarea class="form-control" rows="3" id="description" placeholder="Description" data-bind="value: selectionItem().description, valueUpdate: 'afterkeydown'" name="description"></textarea>
 						  </div>
+
 						  <div class="form-group">
-						    <label for="servicePrice">Price</label>
-						    <input type="text" class="form-control" id="servicePrice" placeholder="$20.00">
+						    <label for="regularPrice">Price</label>
+						    <div class="input-group">
+						    	<span class="input-group-addon">$</span>
+						    	<input type="text" class="form-control" id="regularPrice" data-bind="value: selectionItem().regularPrice, valueUpdate: 'afterkeydown'" placeholder="$20.00">
+						  	</div>
 						  </div>
+
 						  <div class="form-group">
 						    <label for="serviceLength">Appointment Length</label>
-						    <input type="text" class="form-control" id="serviceLength" placeholder="90 Minutes">
+						    <div class="input-group">
+						    	<input type="text" class="form-control" id="serviceLength" data-bind="value: selectionItem().appointmentLength, valueUpdate: 'afterkeydown'" placeholder="90">
+						    	<span class="input-group-addon"> Minutes</span>
+						    </div>
 						  </div>
+						  <!-- /ko -->
+
 					</div>
-					<div data-bind="case: $default">
+					<div data-bind="case: $default"> <!-- 	NO DATA SELECTED -->
 						<h2>Get started by selecting an item to the left.</h2> 
 					</div>
 				</div>
 			</div>
 		</div>	
 	</div>
-     <!-- Custom JavaScript for the Menu Toggle -->
+
+     <!-- Custom JavaScript for the Menu Toggle, shouldnt be loaded before rest of page like other sources -->
     <script>
     $("#menu-toggle").click(function(e) {
         e.preventDefault();
